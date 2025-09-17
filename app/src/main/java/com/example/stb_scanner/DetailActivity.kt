@@ -1,0 +1,100 @@
+package com.example.stb_scanner
+
+import android.media.tv.TvContract
+import android.media.tv.TvInputManager
+import android.media.tv.TvView
+import android.os.Bundle
+import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+
+import com.example.stb_scanner.databinding.ActivityDetailBinding
+import com.example.stb_scanner.helper.ChannelHelper
+import com.example.stb_scanner.model.TvChannel
+
+
+class DetailActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityDetailBinding
+    private lateinit var channels: List<TvChannel>
+    private var currentIndex: Int = -1
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val channelId = intent.getLongExtra("channelId", -1L)
+        val inputId = intent.getStringExtra("inputId")
+
+        // ✅ Ambil semua channel
+        channels = ChannelHelper.getAllChannels(this)
+
+        // ✅ Cari posisi channel yg dipilih
+        currentIndex = channels.indexOfFirst { it.id == channelId }
+
+        if (currentIndex != -1 && inputId != null) {
+            tuneChannel(inputId, channels[currentIndex].id)
+        }
+    }
+
+    private fun tuneChannel(inputId: String, channelId: Long) {
+        val channelUri = TvContract.buildChannelUri(channelId)
+
+        binding.tvView.setCallback(object : TvView.TvInputCallback() {
+            override fun onVideoAvailable(inputId: String?) {
+                binding.unavailableView.visibility = View.GONE
+                Log.d("DetailActivity", "Video available ✅")
+            }
+
+            override fun onVideoUnavailable(inputId: String?, reason: Int) {
+                binding.unavailableView.visibility = View.VISIBLE
+                val message = when (reason) {
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_UNKNOWN -> "Unknown"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_TUNING -> "Tuning..."
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL -> "Weak Signal"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_BUFFERING -> "Buffering"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY -> "Audio Only"
+                    else -> "Other"
+                }
+                binding.tvUnavailable.text = message
+            }
+        })
+
+        binding.tvView.tune(inputId, channelUri)
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                moveToNextChannel()
+                return true
+            }
+            KeyEvent.KEYCODE_DPAD_UP -> {
+                moveToPrevChannel()
+                return true
+            }
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    private fun moveToNextChannel() {
+        if (channels.isNotEmpty() && currentIndex < channels.size - 1) {
+            currentIndex++
+            tuneChannel(channels[currentIndex].inputId, channels[currentIndex].id)
+        }
+    }
+
+    private fun moveToPrevChannel() {
+        if (channels.isNotEmpty() && currentIndex > 0) {
+            currentIndex--
+            tuneChannel(channels[currentIndex].inputId, channels[currentIndex].id)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.tvView.reset()
+    }
+}
