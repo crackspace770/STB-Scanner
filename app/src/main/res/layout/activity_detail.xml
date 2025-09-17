@@ -13,10 +13,22 @@
         android:id="@+id/txtChannelInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#66000000"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/holo_blue_dark"
         android:padding="8dp"
-        android:layout_gravity="top|center_horizontal"/>
+        android:text="Channel Name"
+        android:textSize="26sp"
+        android:layout_gravity="top|start"/>
+
+    <TextView
+        android:id="@+id/txtChannelNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:textColor="@android:color/holo_blue_dark"
+        android:padding="8dp"
+        android:text="No. Channel"
+        android:textSize="32sp"
+        android:layout_gravity="top|end"/>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +43,7 @@
             android:id="@+id/tvUnavailable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Channel tidak tersedia"
+            android:text="@string/channel_tidak_tersedia"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

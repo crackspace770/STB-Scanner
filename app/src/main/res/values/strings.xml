@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">STB-Scanner</string>
+    <string name="channel_tidak_tersedia">Channel tidak tersedia</string>
 </resources>

@@ -69,12 +69,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadChannels() {
         val channels = ChannelHelper.getAllChannels(this)
-        channelAdapter.submitList(channels)
+            .filter { !it.number.isNullOrBlank() } // ✅ hanya ambil channel yang punya number
+            .filter { it.number!!.matches(Regex("^\\d+$")) }
+
+        binding.recyclerChannels.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = channelAdapter
+        }
+
+        channelAdapter.submitList(channels) // ✅ filter sudah jalan
 
         binding.recyclerChannels.post {
             binding.recyclerChannels.requestFocus()
         }
     }
+
 
 
 }
