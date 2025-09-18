@@ -27,7 +27,7 @@ class ChannelAdapter(
         "TRANS TV HD" to R.drawable.placeholder,
         "TRANS 7 HD" to R.drawable.placeholder,
         "INDOSIAR HD" to R.drawable.placeholder,
-        "SCTV HD" to R.drawable.ic_abc,
+        "SCTV HD" to R.drawable.placeholder,
         "ANTV" to R.drawable.placeholder,
         "TVRI" to R.drawable.placeholder,
         "CNN INDONESIA HD" to R.drawable.placeholder,

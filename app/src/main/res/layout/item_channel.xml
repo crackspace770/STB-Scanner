@@ -29,6 +29,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:textColor="@color/item_channel_text_color"
+        android:duplicateParentState="true"
         />
 
     <TextView
@@ -39,5 +40,6 @@
         android:layout_marginTop="12dp"
         android:textSize="18sp"
         android:textColor="@color/item_channel_text_color"
+        android:duplicateParentState="true"
         />
 </LinearLayout>

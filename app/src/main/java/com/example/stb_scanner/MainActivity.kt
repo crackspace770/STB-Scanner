@@ -3,8 +3,10 @@ package com.example.stb_scanner
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,15 +22,35 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val channelAdapter by lazy {
+    private val detailLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val selectedChannelId = result.data?.getLongExtra("selectedChannelId", -1L) ?: -1L
+                if (selectedChannelId != -1L) {
+                    val index = channelAdapter.currentList.indexOfFirst { it.id == selectedChannelId }
+                    if (index != -1) {
+                        binding.rvChannels.scrollToPosition(index)
+                        binding.rvChannels.post {
+                            binding.rvChannels.findViewHolderForAdapterPosition(index)
+                                ?.itemView?.requestFocus()
+                        }
+                    }
+                }
+            }
+        }
+
+    private val channelAdapter: ChannelAdapter by lazy {
         ChannelAdapter { channel ->
             val intent = Intent(this, DetailActivity::class.java).apply {
                 putExtra("channelId", channel.id)     // ✅ sesuai DetailActivity
                 putExtra("inputId", channel.inputId) // ✅ sesuai DetailActivity
             }
-            startActivity(intent)
+            detailLauncher.launch(intent)
+            //startActivity(intent)
         }
     }
+
+
 
     private lateinit var recyclerView: RecyclerView
 
@@ -44,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerChannels.apply {
+        binding.rvChannels.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = channelAdapter
         }
@@ -69,18 +91,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadChannels() {
         val channels = ChannelHelper.getAllChannels(this)
-            .filter { !it.number.isNullOrBlank() } // ✅ hanya ambil channel yang punya number
-            .filter { it.number!!.matches(Regex("^\\d+$")) }
+            .filter { !it.number.isNullOrBlank() } // hanya ambil channel yang punya number
+            .filter { it.number!!.matches(Regex("^\\d+$")) } //filter angka solid
 
-        binding.recyclerChannels.apply {
+        binding.rvChannels.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = channelAdapter
         }
 
-        channelAdapter.submitList(channels) // ✅ filter sudah jalan
+        channelAdapter.submitList(channels)
 
-        binding.recyclerChannels.post {
-            binding.recyclerChannels.requestFocus()
+        binding.rvChannels.post {
+            binding.rvChannels.requestFocus()
         }
     }
 

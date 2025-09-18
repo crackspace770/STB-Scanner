@@ -1,5 +1,8 @@
 package com.example.stb_scanner
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.media.tv.TvContract
 import android.media.tv.TvInputManager
 import android.media.tv.TvView
@@ -61,8 +64,8 @@ class DetailActivity : AppCompatActivity() {
             override fun onVideoUnavailable(inputId: String?, reason: Int) {
                 binding.unavailableView.visibility = View.VISIBLE
                 val message = when (reason) {
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_UNKNOWN -> "Tidak Tersedia"
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_TUNING -> "Tuning..."
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_UNKNOWN -> "Channel Tidak Tersedia"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_TUNING -> "Loading"
                     TvInputManager.VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL -> "Sinyal Lemah"
                     TvInputManager.VIDEO_UNAVAILABLE_REASON_BUFFERING -> "Buffering"
                     TvInputManager.VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY -> "Audio Only"
@@ -88,6 +91,18 @@ class DetailActivity : AppCompatActivity() {
         }
         return super.onKeyDown(keyCode, event)
     }
+
+    @SuppressLint("GestureBackNavigation")
+    override fun onBackPressed() {
+        val channelId = if (currentIndex != -1) channels[currentIndex].id else -1L
+        val resultIntent = Intent().apply {
+            putExtra("selectedChannelId", channelId)
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        super.onBackPressed()
+    }
+
+
 
     private fun moveToNextChannel() {
         if (channels.isNotEmpty() && currentIndex < channels.size - 1) {
