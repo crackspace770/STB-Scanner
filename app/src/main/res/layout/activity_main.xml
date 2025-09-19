@@ -1,67 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="vertical">
 
-   >
-
-
-
-
+    <!-- Header -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/cv_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/black"
-        app:cardElevation="4dp"
-        >
+        app:cardElevation="4dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="12dp"
+            android:gravity="center_vertical">
 
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:text="Channel List"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:fontFamily="@font/led_dot_matrix"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"
                 >
 
                 <TextView
-                    android:id="@+id/txtTitle"
+                    android:id="@+id/tvClock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Channel List"
-                    android:layout_marginTop="12dp"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
+                    android:text="10:00"
+                    android:textSize="16sp"
                     android:fontFamily="@font/led_dot_matrix"
-                    android:textStyle="bold"
-                    android:gravity="start"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="12dp"/>
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="4dp"
+                    />
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/imageView3"-->
-<!--                    android:layout_width="25dp"-->
-<!--                    android:layout_height="25dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginStart="520dp"-->
-<!--                    app:srcCompat="@drawable/ic_account_circle" />-->
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="19/09/2025"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/led_dot_matrix"
+                    android:textColor="@color/white"
+                    />
+
 
             </LinearLayout>
 
 
 
+        </LinearLayout>
 
 
 
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvChannels"
+    <!-- Container untuk RV dan NoChannel -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="12dp"
-        android:paddingHorizontal="12dp"
-        />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChannels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp"
+            android:paddingHorizontal="12dp" />
+
+        <!-- View untuk "no channel" -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/noChannelView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Channel Tidak Tersedia"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="32sp"
+                android:fontFamily="@font/led_dot_matrix"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
 </LinearLayout>
