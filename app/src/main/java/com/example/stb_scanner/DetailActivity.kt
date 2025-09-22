@@ -64,15 +64,49 @@ class DetailActivity : AppCompatActivity() {
             override fun onVideoUnavailable(inputId: String?, reason: Int) {
                 binding.unavailableView.visibility = View.VISIBLE
                 val message = when (reason) {
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_UNKNOWN -> "Channel Tidak Tersedia"
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_TUNING -> "Loading"
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL -> "Sinyal Lemah"
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_BUFFERING -> "Buffering"
-                    TvInputManager.VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY -> "Audio Only"
-                    else -> "Unknown Error"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_UNKNOWN ->
+                        "Video tidak tersedia (Unknown)"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_TUNING ->
+                        "Tuning..."
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_WEAK_SIGNAL ->
+                        "Sinyal Lemah"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_BUFFERING ->
+                        "Buffering..."
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_AUDIO_ONLY ->
+                        "Audio Only"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_NOT_CONNECTED ->
+                        "Belum terhubung (cek kabel/HDMI)"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_INSUFFICIENT_RESOURCE ->
+                        "Resource perangkat tidak cukup"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_INSUFFICIENT_OUTPUT_PROTECTION ->
+                        "Proteksi output tidak mencukupi"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_PVR_RECORDING_NOT_ALLOWED ->
+                        "Rekaman PVR tidak diizinkan"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_LICENSE_EXPIRED ->
+                        "Lisensi sudah kedaluwarsa"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_NEED_ACTIVATION ->
+                        "Perangkat perlu aktivasi"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_NEED_PAIRING ->
+                        "Perangkat perlu dipasangkan (pairing)"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_NO_CARD ->
+                        "Kartu pintar (smart card) tidak ditemukan"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_CARD_MUTE ->
+                        "Kartu pintar dalam kondisi mute"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_CARD_INVALID ->
+                        "Kartu pintar tidak valid"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_BLACKOUT ->
+                        "Channel diblokir (blackout geografis)"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_REBOOTING ->
+                        "CAS sedang reboot"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_CAS_UNKNOWN ->
+                        "Error CAS tidak diketahui"
+                    TvInputManager.VIDEO_UNAVAILABLE_REASON_STOPPED ->
+                        "Pemutaran dihentikan"
+                    else -> "Error tidak diketahui ($reason)"
                 }
                 binding.tvUnavailable.text = message
             }
+
         })
 
         binding.tvView.tune(inputId, channelUri)

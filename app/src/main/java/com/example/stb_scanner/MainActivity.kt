@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         val channels = ChannelHelper.getAllChannels(this)
             .filter { !it.number.isNullOrBlank() } // hanya ambil channel yang punya number
             .filter { it.number!!.matches(Regex("^\\d+$")) } // filter angka solid
+            .sortedBy { it.number!!.toInt() }
 
         if (channels.isEmpty()) {
             // ❌ Tidak ada channel -> tampilkan noChannelView
